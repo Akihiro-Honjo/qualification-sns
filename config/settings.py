@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'goals',  #追加
+    'studies',  #追加
 ]
 
 MIDDLEWARE = [
