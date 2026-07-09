@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>Study Tracker</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+Study Tracker
+{% endblock %}
+
+{% block content %}
 
 <h1>Study Tracker</h1>
 
-<p>資格・勉強記録SNSへようこそ！</p>
+<p class="lead">
+資格・勉強記録SNSへようこそ！
+</p>
 
-<ul>
-    <li>資格管理</li>
-    <li>勉強記録</li>
-    <li>AI学習サポート（開発予定）</li>
-</ul>
+<div class="mt-4">
 
-</body>
-</html>
+    <a href="#" class="btn btn-primary">
+        資格一覧
+    </a>
+
+    <a href="#" class="btn btn-success">
+        学習記録
+    </a>
+
+</div>
+
+{% endblock %}
