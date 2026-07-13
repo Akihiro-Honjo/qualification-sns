@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+資格一覧
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    資格一覧
+</h1>
+
+{% for qualification in qualifications %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h4>
+            {{ qualification.name }}
+        </h4>
+
+        <p>
+            試験日：{{ qualification.exam_date|date:"Y年m月d日" }}
+        </p>
+
+        <p>
+            目標勉強時間：
+            <strong>目標勉強時間</strong><br>
+            {{ qualification.target_hours }}時間
+        </p>
+
+        <p>
+            目標点数：
+            <strong>目標点数</strong><br>       
+            {{ qualification.target_score }}点
+        </p>
+
+    <a href="#" class="btn btn-success">
+        学習記録を見る
+    </a>
+    </div>
+
+
+</div>
+
+{% empty %}
+
+<p>
+資格が登録されていません。
+</p>
+
+{% endfor %}
+
+{% endblock %}
