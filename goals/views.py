@@ -85,3 +85,23 @@ def qualification_update(request, pk):
             "form": form,
         },
     )
+    
+
+def qualification_delete(request, pk):
+
+    qualification = get_object_or_404(
+        Qualification,
+        pk=pk,
+    )
+
+    if request.method == "POST":
+        qualification.delete()
+        return redirect("qualification_list")
+
+    return render(
+        request,
+        "goals/qualification_confirm_delete.html",
+        {
+            "qualification": qualification,
+        },
+    )

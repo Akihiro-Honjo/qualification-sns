@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+資格削除
+{% endblock %}
+
+{% block content %}
+
+<h2>資格削除</h2>
+
+<div class="alert alert-danger">
+
+    <p>
+        本当に
+        <strong>{{ qualification.name }}</strong>
+        を削除しますか？
+    </p>
+
+</div>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        class="btn btn-danger"
+    >
+        削除する
+    </button>
+
+    <a
+        href="{% url 'qualification_list' %}"
+        class="btn btn-secondary"
+    >
+        キャンセル
+    </a>
+
+</form>
+
+{% endblock %}
