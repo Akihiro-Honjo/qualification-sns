@@ -10,4 +10,10 @@ urlpatterns = [
         views.qualification_create,
         name="qualification_create",
     ),
+    
+    path(
+    "<int:pk>/edit/",
+    views.qualification_update,
+    name="qualification_update",
+),
 ]

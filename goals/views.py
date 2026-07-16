@@ -6,6 +6,8 @@ from .forms import QualificationForm
 
 
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+
 # Create your views here.
 
 def qualification_list(request):
@@ -32,7 +34,7 @@ def qualification_create(request):
             qualification = form.save(commit=False)
 
             
-            # qualification.user = request.user
+            # qualification.user = request.user 【戻す】
             qualification.user = User.objects.first()
 
             qualification.save()
@@ -42,6 +44,39 @@ def qualification_create(request):
     else:
 
         form = QualificationForm()
+
+    return render(
+        request,
+        "goals/qualification_form.html",
+        {
+            "form": form,
+        },
+    )
+    
+
+def qualification_update(request, pk):
+
+    qualification = get_object_or_404(
+        Qualification,
+        pk=pk,
+    )
+
+    if request.method == "POST":
+
+        form = QualificationForm(
+            request.POST,
+            instance=qualification,
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect("qualification_list")
+
+    else:
+
+        form = QualificationForm(
+            instance=qualification,
+        )
 
     return render(
         request,

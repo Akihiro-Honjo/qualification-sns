@@ -6,7 +6,13 @@
 
 {% block content %}
 
-<h2>資格追加</h2>
+<h2>
+{% if form.instance.pk %}
+資格編集
+{% else %}
+資格追加
+{% endif %}
+</h2>
 
 <form method="post">
 
