@@ -41,7 +41,8 @@ class="btn btn-success mb-3"
             {{ qualification.target_score }}点
         </p>
 
-    <a href="#" class="btn btn-success">
+        <a href="{% url 'study_record_list' qualification.pk %}" 
+        class="btn btn-success">
         学習記録を見る
     </a>
 

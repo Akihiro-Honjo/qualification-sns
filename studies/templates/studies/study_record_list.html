@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+学習記録
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ qualification.name }} 学習記録</h2>
+
+<a href="#" class="btn btn-success mb-3">
+    ＋学習記録追加
+</a>
+
+{% for record in study_records %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>{{ record.study_date|date:"Y年m月d日" }}</h5>
+
+        <p>
+            学習時間：
+            {{ record.study_time }}分
+        </p>
+
+        <p>
+            学習内容：
+            {{ record.content }}
+        </p>
+
+        <p>
+            理解度：
+            {{ record.understanding }}/5
+        </p>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>まだ学習記録はありません。</p>
+
+{% endfor %}
+
+{% endblock %}
