@@ -8,7 +8,10 @@
 
 <h2>{{ qualification.name }} 学習記録</h2>
 
-<a href="#" class="btn btn-success mb-3">
+<a
+    href="{% url 'study_record_create' qualification.pk %}"
+    class="btn btn-success mb-3"
+>
     ＋学習記録追加
 </a>
 

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+学習記録追加
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">{{ qualification.name }} 学習記録追加</h2>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">学習日</label>
+        {{ form.study_date }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">学習時間（分）</label>
+        {{ form.study_time }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">学習内容</label>
+        {{ form.content }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">理解度（1～5）</label>
+        {{ form.understanding }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        登録
+    </button>
+
+    <a href="{% url 'study_record_list' qualification.pk %}"
+        class="btn btn-secondary">
+        キャンセル
+    </a>
+
+</form>
+
+{% endblock %}

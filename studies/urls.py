@@ -8,4 +8,9 @@ urlpatterns = [
         views.study_record_list,
         name="study_record_list",
     ),
+    path(
+    "<int:qualification_id>/create/",
+    views.study_record_create,
+    name="study_record_create",
+    ),
 ]
