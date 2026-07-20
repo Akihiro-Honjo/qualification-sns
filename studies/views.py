@@ -67,3 +67,42 @@ def study_record_create(request, qualification_id):
             "qualification": qualification,
         },
     )
+    
+
+def study_record_update(request, pk):
+
+    record = get_object_or_404(
+        StudyRecord,
+        pk=pk,
+    )
+
+    if request.method == "POST":
+
+        form = StudyRecordForm(
+            request.POST,
+            instance=record,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect(
+                "study_record_list",
+                qualification_id=record.qualification.pk,
+            )
+
+    else:
+
+        form = StudyRecordForm(
+            instance=record,
+        )
+
+    return render(
+        request,
+        "studies/study_record_form.html",
+        {
+            "form": form,
+            "qualification": record.qualification,
+        },
+    )

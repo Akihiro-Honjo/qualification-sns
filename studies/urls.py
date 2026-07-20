@@ -13,4 +13,9 @@ urlpatterns = [
     views.study_record_create,
     name="study_record_create",
     ),
+    path(
+    "<int:pk>/edit/",
+    views.study_record_update,
+    name="study_record_update",
+    ),
 ]
