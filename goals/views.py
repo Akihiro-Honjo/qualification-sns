@@ -9,20 +9,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 from studies.models import StudyRecord
+from datetime import date
 # Create your views here.
 
-# def qualification_list(request):
-#     qualifications = Qualification.objects.all()
 
-#     context = {
-#         "qualifications": qualifications,
-#     }
-
-#     return render(
-#         request,
-#         "goals/qualification_list.html",
-#         context,
-#     )
 def qualification_list(request):
     qualifications = Qualification.objects.all()
 
@@ -52,15 +42,58 @@ def qualification_list(request):
         else:
             qualification.progress = 0
             
-    if qualification.progress < 30:
-        qualification.progress_color = "bg-danger"
-    elif qualification.progress < 70:
-        qualification.progress_color = "bg-warning"
-    else:
-        qualification.progress_color = "bg-success"
+        if qualification.progress < 30:
+            qualification.progress_color = "bg-danger"
+        elif qualification.progress < 70:
+            qualification.progress_color = "bg-warning"
+        else:
+            qualification.progress_color = "bg-success"
 
-    context = {
-        "qualifications": qualifications,
+        today = date.today()
+
+        if qualification.exam_date:
+            qualification.days_left = (
+                qualification.exam_date - today
+            ).days
+        else:
+            qualification.days_left = None
+            
+# 追加ここから
+        if qualification.days_left is not None and qualification.days_left > 0:
+
+            remaining_hours = max(
+                qualification.target_hours - qualification.total_hours,
+                0
+            )
+
+            qualification.remaining_hours = round(
+                remaining_hours,
+                1
+            )
+
+            qualification.hours_per_day = round(
+                remaining_hours / qualification.days_left,
+                2
+            )
+
+        else:
+
+            qualification.remaining_hours = 0
+            qualification.hours_per_day = 0
+# 追加ここまで
+        if qualification.hours_per_day <= 1:
+            qualification.advice = "このペースなら無理なく目標達成できそうです！"
+
+        elif qualification.hours_per_day <= 2:
+            qualification.advice = "少し意識して毎日学習を続けましょう！"
+
+        else:
+            qualification.advice = "目標達成には学習時間を増やす必要があります！"
+
+        context = {
+            "qualifications": qualifications,
+        
+        
     }
 
     return render(

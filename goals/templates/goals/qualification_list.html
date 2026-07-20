@@ -19,6 +19,7 @@ class="btn btn-success mb-3"
 
 {% for qualification in qualifications %}
 
+<!-- 資格カード内 -->
 <div class="card mb-3">
 
     <div class="card-body">
@@ -53,7 +54,39 @@ class="btn btn-success mb-3"
     📅 試験日：
     {{ qualification.exam_date|date:"Y年m月d日" }}
 </p>
+
+{% if qualification.days_left > 0 %}
+<p class="text-primary">
+    ⏰ あと {{ qualification.days_left }} 日
+</p>
+
+{% elif qualification.days_left == 0 %}
+<p class="text-warning">
+    🎉 今日が試験日です！
+</p>
+
+{% else %}
+<p class="text-danger">
+    試験終了
+</p>
+
+{% endif %}
 <!-- 追加ここまで -->
+<p>
+    📖 残り学習時間：
+    {{ qualification.remaining_hours }}時間
+</p>
+
+{% if qualification.days_left > 0 %}
+<p class="text-success">
+    🎯 1日あたり
+    <strong>{{ qualification.hours_per_day }}</strong>
+    時間勉強すると目標達成できます！
+</p>
+<div class="alert alert-info mt-3">
+    🤖 {{ qualification.advice }}
+</div>
+{% endif %}
 
         <p>
             <strong>目標勉強時間：</strong><br>
@@ -86,11 +119,10 @@ class="btn btn-success mb-3"
     >
         削除
     </a>
-    
-
-</div>
 
     </div>
+
+</div>
     
 </div>
 
