@@ -27,9 +27,33 @@ class="btn btn-success mb-3"
             {{ qualification.name }}
         </h4>
 
+        <!-- 追加 -->
         <p>
-            試験日：{{ qualification.exam_date|date:"Y年m月d日" }}
-        </p>
+    学習時間：
+    <strong>{{ qualification.total_hours }}時間</strong>
+    / {{ qualification.target_hours }}時間
+</p>
+<p class="mb-1">
+    進捗率：<strong>{{ qualification.progress }}%</strong>
+</p>
+
+<div class="progress mb-3">
+    <div
+        class="progress-bar {{ qualification.progress_color }}"
+        role="progressbar"
+        style="width: {{ qualification.progress }}%;"
+        aria-valuenow="{{ qualification.progress }}"
+        aria-valuemin="0"
+        aria-valuemax="100">
+    </div>
+</div>
+</div>
+
+<p>
+    📅 試験日：
+    {{ qualification.exam_date|date:"Y年m月d日" }}
+</p>
+<!-- 追加ここまで -->
 
         <p>
             <strong>目標勉強時間：</strong><br>

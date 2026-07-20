@@ -6,22 +6,109 @@ Study Tracker
 
 {% block content %}
 
-<h1>Study Tracker</h1>
+<h1 class="mb-4">📚 Study Tracker</h1>
 
-<p class="lead">
-資格・勉強記録SNSへようこそ！
-</p>
+<div class="row">
 
-<div class="mt-4">
+    <div class="col-md-3">
 
-    <a href="/qualifications/" class="btn btn-primary">
-        資格一覧
-    </a>
+        <div class="card text-center mb-3">
 
-    <a href="#" class="btn btn-success">
-        学習記録
-    </a>
+            <div class="card-body">
+
+                <h5>🎯 保有資格</h5>
+
+                <h2>{{ qualification_count }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>📝 学習記録</h5>
+
+                <h2>{{ study_record_count }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>⏰ 今日</h5>
+
+                <h2>{{ today_total }}分</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>📅 今週</h5>
+
+                <h2>{{ week_total }}分</h2>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
+
+<hr>
+
+<h3>直近の学習記録</h3>
+
+{% for record in recent_records %}
+
+<div class="card mb-2">
+
+    <div class="card-body">
+
+        <strong>{{ record.qualification.name }}</strong><br>
+
+        {{ record.study_date|date:"Y年m月d日" }}
+
+        ・
+
+        {{ record.study_time }}分
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>まだ学習記録はありません。</p>
+
+{% endfor %}
+
+<hr>
+
+<a href="{% url 'qualification_list' %}"
+    class="btn btn-primary">
+    資格一覧
+</a>
 
 {% endblock %}
