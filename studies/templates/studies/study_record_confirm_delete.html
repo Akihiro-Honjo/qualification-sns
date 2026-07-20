@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+学習記録削除
+{% endblock %}
+
+{% block content %}
+
+<h2>学習記録削除</h2>
+
+<div class="alert alert-danger">
+
+    <p>
+        この学習記録を削除しますか？
+    </p>
+
+    <ul>
+        <li>学習日：{{ record.study_date|date:"Y年m月d日" }}</li>
+        <li>学習時間：{{ record.study_time }}分</li>
+        <li>学習内容：{{ record.content }}</li>
+    </ul>
+
+</div>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        class="btn btn-danger"
+    >
+        削除する
+    </button>
+
+    <a
+        href="{% url 'study_record_list' record.qualification.pk %}"
+        class="btn btn-secondary"
+    >
+        キャンセル
+    </a>
+
+</form>
+
+{% endblock %}

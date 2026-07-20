@@ -106,3 +106,28 @@ def study_record_update(request, pk):
             "qualification": record.qualification,
         },
     )
+    
+def study_record_delete(request, pk):
+
+    record = get_object_or_404(
+        StudyRecord,
+        pk=pk,
+    )
+
+    qualification_id = record.qualification.pk
+
+    if request.method == "POST":
+        record.delete()
+
+        return redirect(
+            "study_record_list",
+            qualification_id=qualification_id,
+        )
+
+    return render(
+        request,
+        "studies/study_record_confirm_delete.html",
+        {
+            "record": record,
+        },
+    )
