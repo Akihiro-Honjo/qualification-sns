@@ -75,6 +75,13 @@ Study Tracker
     </div>
 
 </div>
+<hr>
+
+<h3>📊 直近7日間の学習時間</h3>
+
+<canvas id="studyChart"></canvas>
+
+<hr>
 
 <hr>
 
@@ -110,5 +117,43 @@ Study Tracker
     class="btn btn-primary">
     資格一覧
 </a>
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+const labels = JSON.parse('{{ chart_labels|escapejs }}');
+const data = JSON.parse('{{ chart_data|escapejs }}');
+
+const ctx = document.getElementById('studyChart');
+
+new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '学習時間（分）',
+            data: data,
+            borderWidth: 1
+        }]
+    },
+
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
 
 {% endblock %}
