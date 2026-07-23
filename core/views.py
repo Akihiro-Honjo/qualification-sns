@@ -73,6 +73,8 @@ def home(request):
         "recent_records": recent_records,
         "chart_labels": json.dumps(labels),
         "chart_data": json.dumps(study_times),
+        "streak": streak,
+        "today_studied": today_studied,
     }
 
     return render(
@@ -80,3 +82,37 @@ def home(request):
         "core/home.html",
         context,
     )
+
+study_dates = list(
+    StudyRecord.objects.values_list(
+        "study_date",
+        flat=True
+    ).distinct()
+)
+
+study_dates = sorted(study_dates, reverse=True)
+
+streak = 0
+
+if study_dates:
+
+    today = date.today()
+
+    if study_dates[0] == today:
+        check_day = today
+
+    elif study_dates[0] == today - timedelta(days=1):
+        check_day = today - timedelta(days=1)
+
+    else:
+        check_day = None
+
+    while check_day in study_dates:
+
+        streak += 1
+
+        check_day -= timedelta(days=1)
+    
+    today_studied = StudyRecord.objects.filter(
+    study_date=date.today()
+).exists()
