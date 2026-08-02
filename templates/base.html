@@ -23,6 +23,59 @@
             📚 Study Tracker
         </a>
 
+        <div class="ms-auto">
+
+            {% if user.is_authenticated %}
+
+                <span class="text-white me-3">
+                    👋 {{ user.username }} さん
+                </span>
+
+                <a
+                    href="{% url 'qualification_list' %}"
+                    class="btn btn-outline-light me-2">
+                    資格一覧
+                </a>
+
+                <form
+                    action="{% url 'logout' %}"
+                    method="post"
+                    style="display:inline;">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-warning">
+
+                        ログアウト
+
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <a
+                    href="{% url 'login' %}"
+                    class="btn btn-outline-light me-2">
+
+                    ログイン
+
+                </a>
+
+                <a
+                    href="{% url 'signup' %}"
+                    class="btn btn-light">
+
+                    新規登録
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
     </div>
 
 </nav>
