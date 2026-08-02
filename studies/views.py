@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 
 from goals.models import Qualification
@@ -8,11 +9,13 @@ from django.shortcuts import redirect
 from .forms import StudyRecordForm
 # Create your views here.
 
+@login_required
 def study_record_list(request, qualification_id):
 
     qualification = get_object_or_404(
         Qualification,
         pk=qualification_id,
+        user=request.user,
     )
 
     study_records = StudyRecord.objects.filter(
@@ -30,12 +33,13 @@ def study_record_list(request, qualification_id):
         context,
     )
     
-
+@login_required
 def study_record_create(request, qualification_id):
 
     qualification = get_object_or_404(
         Qualification,
         pk=qualification_id,
+        user=request.user,
     )
 
     if request.method == "POST":
@@ -68,12 +72,14 @@ def study_record_create(request, qualification_id):
         },
     )
     
-
+    
+@login_required
 def study_record_update(request, pk):
 
     record = get_object_or_404(
         StudyRecord,
         pk=pk,
+        qualification__user=request.user,
     )
 
     if request.method == "POST":
@@ -106,12 +112,15 @@ def study_record_update(request, pk):
             "qualification": record.qualification,
         },
     )
-    
+
+
+@login_required
 def study_record_delete(request, pk):
 
     record = get_object_or_404(
         StudyRecord,
         pk=pk,
+        user=request.user,
     )
 
     qualification_id = record.qualification.pk

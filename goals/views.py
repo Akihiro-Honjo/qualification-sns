@@ -1,21 +1,25 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Qualification
 
 from django.shortcuts import redirect
 from .forms import QualificationForm
 
-
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 from studies.models import StudyRecord
 from datetime import date
 # Create your views here.
 
-
+@login_required
 def qualification_list(request):
-    qualifications = Qualification.objects.all()
+    # qualifications = Qualification.objects.all()
 
+
+    qualifications = Qualification.objects.filter(
+    user=request.user
+    )
+    
     for qualification in qualifications:
 
         total_minutes = sum(
@@ -90,10 +94,8 @@ def qualification_list(request):
         else:
             qualification.advice = "目標達成には学習時間を増やす必要があります！"
 
-        context = {
-            "qualifications": qualifications,
-        
-        
+    context = {
+    "qualifications": qualifications, 
     }
 
     return render(
@@ -101,8 +103,9 @@ def qualification_list(request):
         "goals/qualification_list.html",
         context,
     )
-
+@login_required
 def qualification_create(request):
+
 
     if request.method == "POST":
 
@@ -113,8 +116,8 @@ def qualification_create(request):
             qualification = form.save(commit=False)
 
             
-            # qualification.user = request.user 【戻す】
-            qualification.user = User.objects.first()
+            qualification.user = request.user
+            # qualification.user = User.objects.first()
 
             qualification.save()
 
@@ -132,12 +135,13 @@ def qualification_create(request):
         },
     )
     
-
+@login_required
 def qualification_update(request, pk):
-
+    
     qualification = get_object_or_404(
         Qualification,
         pk=pk,
+        user=request.user
     )
 
     if request.method == "POST":
@@ -165,13 +169,19 @@ def qualification_update(request, pk):
         },
     )
     
-
+@login_required
 def qualification_delete(request, pk):
-
+    
     qualification = get_object_or_404(
-        Qualification,
-        pk=pk,
+    Qualification,
+    pk=pk,
+    user=request.user
     )
+
+    # qualification = get_object_or_404(
+    #     Qualification,
+    #     pk=pk,
+    # )
 
     if request.method == "POST":
         qualification.delete()

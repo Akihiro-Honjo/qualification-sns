@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
 from django.db.models import Sum
 from django.shortcuts import render
@@ -10,19 +11,27 @@ from studies.models import StudyRecord
 # def home(request):
 #     return render(request, "core/home.html")
 
+@login_required
 def home(request):
 
     today = date.today()
 
     week_start = today - timedelta(days=today.weekday())
 
-    qualifications = Qualification.objects.count()
+    # qualifications = Qualification.objects.count()
+    qualifications = Qualification.objects.filter(
+    user=request.user
+    ).count()
 
-    study_records = StudyRecord.objects.count()
+    # study_records = StudyRecord.objects.count()
+    study_records = StudyRecord.objects.filter(
+    qualification__user=request.user
+    ).count()
 
     today_minutes = (
         StudyRecord.objects.filter(
-            study_date=today
+            qualification__user=request.user,
+            study_date=today,
         )
         .values_list("study_time", flat=True)
     )
@@ -31,19 +40,59 @@ def home(request):
 
     week_minutes = (
         StudyRecord.objects.filter(
-            study_date__gte=week_start
+            qualification__user=request.user,
+            study_date__gte=week_start,
         )
         .values_list("study_time", flat=True)
     )
-
+    
     week_total = sum(week_minutes)
 
     recent_records = (
         StudyRecord.objects
+        .filter(
+            qualification__user=request.user
+        )
         .select_related("qualification")
         .order_by("-study_date")[:5]
     )
     
+    study_dates = list(
+        StudyRecord.objects.filter(
+            qualification__user=request.user
+        )
+        .values_list(
+            "study_date",
+            flat=True
+        )
+        .distinct()
+    )
+
+    study_dates = sorted(study_dates, reverse=True)
+
+    streak = 0
+
+    if study_dates:
+
+        if study_dates[0] == today:
+            check_day = today
+
+        elif study_dates[0] == today - timedelta(days=1):
+            check_day = today - timedelta(days=1)
+
+        else:
+            check_day = None
+
+        while check_day is not None and check_day in study_dates:
+            streak += 1
+            check_day -= timedelta(days=1)
+
+    today_studied = StudyRecord.objects.filter(
+        qualification__user=request.user,
+        study_date=today,
+    ).exists()
+
+
     # 追加
     labels = []
     study_times = []
@@ -54,7 +103,8 @@ def home(request):
 
         total = (
             StudyRecord.objects.filter(
-                study_date=target_day
+                qualification__user=request.user,
+                study_date=target_day,
             ).aggregate(
                 Sum("study_time")
             )["study_time__sum"]
@@ -83,36 +133,31 @@ def home(request):
         context,
     )
 
-study_dates = list(
-    StudyRecord.objects.values_list(
-        "study_date",
-        flat=True
-    ).distinct()
-)
 
-study_dates = sorted(study_dates, reverse=True)
 
-streak = 0
+# study_dates = sorted(study_dates, reverse=True)
 
-if study_dates:
+# streak = 0
 
-    today = date.today()
+# if study_dates:
 
-    if study_dates[0] == today:
-        check_day = today
+#     today = date.today()
 
-    elif study_dates[0] == today - timedelta(days=1):
-        check_day = today - timedelta(days=1)
+#     if study_dates[0] == today:
+#         check_day = today
 
-    else:
-        check_day = None
+#     elif study_dates[0] == today - timedelta(days=1):
+#         check_day = today - timedelta(days=1)
 
-    while check_day in study_dates:
+#     else:
+#         check_day = None
 
-        streak += 1
+#     while check_day in study_dates:
 
-        check_day -= timedelta(days=1)
+#         streak += 1
+
+#         check_day -= timedelta(days=1)
     
-    today_studied = StudyRecord.objects.filter(
-    study_date=date.today()
-).exists()
+#     today_studied = StudyRecord.objects.filter(
+#     study_date=date.today()
+# ).exists()
