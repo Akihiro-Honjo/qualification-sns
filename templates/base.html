@@ -30,6 +30,12 @@
                 <span class="text-white me-3">
                     👋 {{ user.username }} さん
                 </span>
+                
+                <a
+                href="{% url 'profile' %}"
+                class="btn btn-outline-light me-2">
+                マイページ
+                </a>
 
                 <a
                     href="{% url 'qualification_list' %}"
@@ -71,6 +77,7 @@
                     新規登録
 
                 </a>
+
 
             {% endif %}
 

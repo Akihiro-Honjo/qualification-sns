@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+マイページ
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">👤 マイページ</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <h4>
+            {{ user.username }} さん
+        </h4>
+
+        <p class="text-muted mb-0">
+            Study Tracker 学習プロフィール
+        </p>
+
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>🎯 登録資格数</h5>
+
+                <h2>
+                    {{ qualification_count }}件
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>⏰ 総学習時間</h5>
+
+                <h2>
+                    {{ total_hours }}時間
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-center mb-3">
+
+            <div class="card-body">
+
+                <h5>📅 総学習日数</h5>
+
+                <h2>
+                    {{ study_days }}日
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<a
+    href="{% url 'qualification_list' %}"
+    class="btn btn-primary">
+    資格一覧を見る
+</a>
+
+{% endblock %}
