@@ -119,6 +119,16 @@ def qualification_create(request):
             qualification.user = request.user
             # qualification.user = User.objects.first()
 
+            # 現在学習中に設定する場合
+            if qualification.is_active:
+
+                Qualification.objects.filter(
+                    user=request.user,
+                    is_active=True
+                ).update(
+                    is_active=False
+                )
+
             qualification.save()
 
             return redirect("qualification_list")
@@ -152,8 +162,31 @@ def qualification_update(request, pk):
         )
 
         if form.is_valid():
-            form.save()
-            return redirect("qualification_list")
+
+            qualification = form.save(
+                commit=False
+            )
+
+            if qualification.is_active:
+
+                Qualification.objects.filter(
+                    user=request.user,
+                    is_active=True
+                ).exclude(
+                    pk=qualification.pk
+                ).update(
+                    is_active=False
+                )
+
+            qualification.save()
+
+            return redirect(
+                "qualification_list"
+            )
+
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect("qualification_list")
 
     else:
 

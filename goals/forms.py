@@ -12,6 +12,7 @@ class QualificationForm(forms.ModelForm):
             "exam_date",
             "target_hours",
             "target_score",
+            "is_active",
         ]
 
         widgets = {

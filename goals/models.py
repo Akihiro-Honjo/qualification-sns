@@ -13,6 +13,12 @@ class Qualification(models.Model):
     exam_date = models.DateField("試験日")
     target_hours = models.PositiveIntegerField("目標勉強時間", default=0)
     target_score = models.PositiveIntegerField("目標点数", default=0)
+    
+    # 現在学習中の資格かどうか
+    is_active = models.BooleanField(
+        "現在学習中",
+        default=False
+    )
 
     created_at = models.DateTimeField("作成日時", auto_now_add=True)
     updated_at = models.DateTimeField("更新日時", auto_now=True)
