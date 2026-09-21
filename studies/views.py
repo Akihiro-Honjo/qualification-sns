@@ -1,13 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from goals.models import Qualification
+
 from .models import StudyRecord
-
-from django.shortcuts import redirect
-
 from .forms import StudyRecordForm
-# Create your views here.
+
 
 @login_required
 def study_record_list(request, qualification_id):
@@ -32,7 +30,8 @@ def study_record_list(request, qualification_id):
         "studies/study_record_list.html",
         context,
     )
-    
+
+
 @login_required
 def study_record_create(request, qualification_id):
 
@@ -54,6 +53,11 @@ def study_record_create(request, qualification_id):
 
             record.save()
 
+            # 現在学習中の資格ならホームへ戻る
+            if qualification.is_active:
+                return redirect("home")
+
+            # 過去・別資格なら資格別の学習記録一覧へ
             return redirect(
                 "study_record_list",
                 qualification_id=qualification.pk,
@@ -71,8 +75,8 @@ def study_record_create(request, qualification_id):
             "qualification": qualification,
         },
     )
-    
-    
+
+
 @login_required
 def study_record_update(request, pk):
 
@@ -120,12 +124,13 @@ def study_record_delete(request, pk):
     record = get_object_or_404(
         StudyRecord,
         pk=pk,
-        user=request.user,
+        qualification__user=request.user,
     )
 
     qualification_id = record.qualification.pk
 
     if request.method == "POST":
+
         record.delete()
 
         return redirect(
